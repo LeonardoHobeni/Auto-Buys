@@ -46,14 +46,82 @@ function doShowMenu(){
       {desc: 'Add BMW', label: 'BMW', func: 'doAddBMW()'},
       {desc: 'Add AUDI', label: 'AUDI', func: 'doAddAUDI()'},
       {desc: 'Update Car', label: 'Update', func: 'doUpdateCar()'},
-      {desc: 'List Cars', label: 'List', func: 'doListCars()'}
+      {desc: 'List Cars', label: 'List', func: 'doListCars()'},
+      {desc: 'Data Analysis', label: 'Analysis', func: 'doShowSubMenu()'}
     ]
   );
 }
 
+// function to display sub-menu
+function doShowSubMenu(){
+  MenuTitle('Data Analysis');
+
+  showMenu(
+    [
+      {desc: 'Order by stock level', label: 'Stock level', func: 'orderByStock()'},
+      {desc: 'Order by price', label: 'Price', func: 'orderByPrice()'},
+      {desc: 'Order by investment', label: 'Investment', func: 'orderByInvestment()'},
+      {desc: 'Zero stock items', label: 'Zero', func: 'orderByZero()'},
+      {desc: 'Total stock value', label: 'Total', func: 'displayTotalValue()'},
+      {desc: 'Add discount', label: 'Add', func: 'addDiscount()'},
+      {desc: 'Remove discount', label: 'Remove', func: 'RemoveDiscount()'},
+      {desc: 'Return to main menu', label: 'Main Menu', func: 'doShowMenu()'}
+    ]
+  );
+}
+
+// function to remove discount to all car prices
+function RemoveDiscount(){
+  dataStore.map((car) => car.price = (car.price / (1 - 0.10)));
+}
+
+// function to add discount to all car prices
+function addDiscount(){
+  dataStore.map((car) => car.price = car.price * 0.90);
+}
+
+// function to display total value of stock
+function displayTotalValue(){
+  let total = dataStore.reduce(
+    (total, car) => total += (car.stockLevel*car.price),
+    0
+  );
+  displayAlert('The total value in stock is $'+total);
+}
+
+// function to list only items with zero stock
+function orderByZero(){
+  let zeroStockList = dataStore.filter((car) => car.stockLevel == 0);
+  carList('Zero Stock List', zeroStockList);
+}
+
+// function to order car by investment
+function orderByInvestment(){
+  dataStore.sort(
+    (a,b) => (b.stockLevel * b.price) - (a.stockLevel * a.price)
+  );
+  carList('Order By Investment', dataStore);
+}
+
+// function to order cars by price
+function orderByPrice(){
+  dataStore.sort((a,b) => b.price - a.price);
+  carList('Order By Price', dataStore);
+}
+
+// function to order cars by stock level
+function orderByStock(){
+  dataStore.sort((a,b) => a.stockLevel - b.stockLevel);
+  carList('Order By Stock Level', dataStore);
+}
+
 function doListCars(){
-  MenuTitle('Car List');
-  for(let car of dataStore){
+  carList('Car List', dataStore);
+}
+
+function carList(heading, data){
+  MenuTitle(heading);
+  for(let car of data){
     doMakeCarList(car);
   }
 }
@@ -176,20 +244,21 @@ function showMenu(schema){
 }
 
 function makeElement(description){
-  let resultPar = document.createElement('p');
+  let resultDiv = document.createElement('div');
+  resultDiv.className = 'menu-content';
 
   let btnDesc = document.createElement('p');
   btnDesc.className = 'menuDesc';
   btnDesc.innerText = description.desc;
-  resultPar.appendChild(btnDesc);
+  resultDiv.appendChild(btnDesc);
 
   let btnElement = document.createElement('button');
   btnElement.innerText = description.label;
   btnElement.setAttribute('onclick', description.func);
   btnElement.className = 'menuBtn';
-  resultPar.appendChild(btnElement);
+  resultDiv.appendChild(btnElement);
 
-  return resultPar;
+  return resultDiv;
 }
 
 

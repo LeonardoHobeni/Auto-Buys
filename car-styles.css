@@ -29,13 +29,16 @@ p{
   color: rgb(19, 62, 94);
 }
 
+.menu-content{
+  display: grid;
+  grid-template-columns: 20em 16em;
+  margin-bottom: 16px;
+}
+
 .menuDesc, .inputLabel{
   font-size: 2em;
   font-family: Signika Negative; 
   color: rgb(16, 67, 93);
-  display: inline-block;
-  width: 7em;
-  margin-top: 10px;
 }
 
 .inputLabel{
@@ -56,16 +59,8 @@ p{
 .menuBtn{
   font-size: 1.5em;
   box-shadow: 0 0 10px black;
-  width: 4em;
-  margin-left: 4em;
   border-radius: 10px;
   transition: width 13ms, font-size 13ms, margin-left 13ms, opacity 13ms;
-}
-
-.menuBtn:hover{
-  width: 8em;
-  font-size: 2em;
-  margin-left: 0;
 }
 
 .menuBtn:active{
